@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: stg_customers
+    columns:
+      - name: customer_id
+        description: Unique ID to identify a customer
+        tests:
+          - unique
+          - not_null
+  - name: stg_orders
+    columns:
+      - name: order_id
+        description: Unique ID for orders
+        tests:
+          - unique
+          - not_null
+      - name: order_status
+        description: Status of the order. Gets updated every time there's an update in the status 
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - "created"
+                  - "shipped"
+                  - "approved"
+                  - "canceled"
+                  - "invoiced"
+                  - "delivered"
+                  - "processing"
+                  - "unavailable"
+      - name: customer_id
+        description: Unique ID to identify a customer. This references the stg_customers model. 
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
